@@ -1,0 +1,16 @@
+price=int(input())
+price= 1000-price
+howmanycoins=0
+howmanycoins=howmanycoins+(price//500)
+price=price-(500*(price//500))
+howmanycoins=howmanycoins+(price//100)
+price=price-(100*(price//100))
+howmanycoins=howmanycoins+(price//50)
+price=price-(50*(price//50))
+howmanycoins=howmanycoins+(price//10)
+price=price-(10*(price//10))
+howmanycoins=howmanycoins+(price//5)
+price=price-(5*(price//5))
+howmanycoins=howmanycoins+(price//1)
+price=price-(1*(price//1))
+print(howmanycoins)
