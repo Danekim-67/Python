@@ -1,15 +1,14 @@
 import sys
 
-# 표준 입출력 설정
 input = sys.stdin.readline
 
 
-def solve():
-    # 태윤이의 현재 글로벌 좌표 (시작점 0,0)
+def findYume():
+    #아비도스 고등학교의 좌표
     curr_r, curr_c = 0, 0
 
-    # 나선형 이동 생성기
-    def spiral_generator():
+    #당근 스파이럴
+    def carrot_spiral():
         length = 1
         while True:
             for _ in range(length): yield 'L'
@@ -19,42 +18,42 @@ def solve():
             for _ in range(length): yield 'U'
             length += 1
 
-    gen = spiral_generator()
+    gen = carrot_spiral()
 
-    # 시야 정보를 읽어오는 함수 (입력 버퍼 처리용)
-    def get_view():
+    #호시노 시야
+    def Hoshino_view():
         try:
             grid = [input().strip() for _ in range(3)]
             return grid
         except:
             return []
 
-    # --- 1단계: 탐색 (Searching) ---
-    # G를 발견할 때까지 나선형으로 이동
+    #유메선배를 찾자
+    #나선형으로 유메를 찾을때까지 이동
 
-    # 초기 시야 확인
-    view = get_view()
+    #호시노의 시야를 확인
+    view = Hoshino_view()
 
-    target_r, target_c = None, None  # 국렬이의 글로벌 좌표 예정지
+    target_r, target_c = None, None  #유메선배의 예상 위치
 
-    # 먼저 시작하자마자 보이는지 확인 (운이 좋은 경우)
+    #혹시 바로 보이는지 확인
     for r in range(3):
         for c in range(3):
             if view[r][c] == 'G':
                 target_r = curr_r + (r - 1)
                 target_c = curr_c + (c - 1)
 
-    # 안 보이면 나선형 이동 시작
+    #안보이면 나선형 이동 시작
     if target_r is None:
         while True:
-            # 1. 이동 방향 결정 (나선형)
+            #이동방향결정
             move_dir = next(gen)
 
-            # 2. 이동 명령 출력
+            #이동명령출력
             print(f"? {move_dir}")
             sys.stdout.flush()
 
-            # 3. 내 좌표 갱신
+            #호시노 좌표 갱신
             if move_dir == 'L':
                 curr_c -= 1
             elif move_dir == 'R':
@@ -64,32 +63,30 @@ def solve():
             elif move_dir == 'D':
                 curr_r += 1
 
-            # 4. 이동 후 시야 확인
-            view = get_view()
+            #이동 후 호시노 시야
+            view = Hoshino_view()
 
-            # 5. 국렬이 발견 체크
-            found_in_view = False
+            #유메선배 발견했는지 체크
+            found_Yume = False
             for r in range(3):
                 for c in range(3):
                     if view[r][c] == 'G':
-                        # 국렬이의 "절대 좌표" 계산해서 저장
+                        #유메선배 예상 위치 수정후 저장
                         target_r = curr_r + (r - 1)
                         target_c = curr_c + (c - 1)
-                        found_in_view = True
+                        found_Yume = True
                         break
-                if found_in_view: break
+                if found_Yume: break
 
-            # 발견했으면 탐색 루프 종료 -> 접근 단계로
-            if found_in_view:
+            #유메선배를 찾음
+            if found_Yume:
                 break
 
-    # --- 2단계: 접근 (Approaching) ---
-    # 국렬이의 좌표(target_r, target_c)를 알았으므로,
-    # 시야에서 사라지든 말든 그 좌표까지 무조건 이동
+    #이제 유메선배를 찾았으니까 그 위치로 이동
 
     while curr_r != target_r or curr_c != target_c:
         move_dir = ''
-        # 가로 이동 우선 (순서 상관 없음)
+        #먼저 가로로 이동후 세로로 이동해서 유메선배에 도착
         if curr_c > target_c:
             move_dir = 'L'
         elif curr_c < target_c:
@@ -111,11 +108,10 @@ def solve():
         elif move_dir == 'D':
             curr_r += 1
 
-        # 이동했으니 입력은 무조건 받아줘야 함 (안 쓰더라도 버퍼 비우기)
-        get_view()
+        #이동후 확실히 찾았는지 확인
+        Hoshino_view()
 
-    # --- 3단계: 귀환 (Returning) ---
-    # 국렬이를 만났으니(현재 위치 == target), 거주지(0,0)로 복귀
+    #유메선배를 찾았으니 아비도스 고등학교로 복귀
 
     while curr_r != 0 or curr_c != 0:
         move_dir = ''
@@ -140,13 +136,13 @@ def solve():
         elif move_dir == 'D':
             curr_r += 1
 
-        # 역시 입력 버퍼 비우기
-        get_view()
+        #아비도스 도착확인
+        Hoshino_view()
 
-    # 도착 완료!
+    #도착
     print("!")
     sys.stdout.flush()
 
 
 if __name__ == "__main__":
-    solve()
+    findYume()
